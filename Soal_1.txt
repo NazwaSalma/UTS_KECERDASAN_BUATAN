@@ -1,0 +1,243 @@
+SOAL 1
+KASUS:
+Seorang petani ingin sistem AI yang bias membantu menentukan jenis hama tanaman berdasarkan gejala seperti:
+•Daun menguning
+•Terdapat bercak hitam
+•Daun berlubang
+•Tanaman layu
+
+TUGAS:
+1.Buat sistem pakar berbasis aturan logika(gunakan minimal 4 tahun).
+2.Gunakan logika proposional,pseudocode,dan pakai prolog atau python.
+3.Tambahkan penjelasan alur inferensi dari input  output.
+
+PEMBAHASAN
+1.Fakta (Facts)
+  Fakta adalah informasi yang disimpan dalam basis data sistem pakar. Dalam kode tersebut, fakta yang digunakan adalah gejala yang dialami oleh tanaman. Fakta ini bersifat dinamis, yang artinya bisa ditambahkan atau dihapus selama eksekusi program.
+  Aturan (Rules)
+  Aturan di Prolog adalah pola logika yang digunakan untuk membuat kesimpulan berdasarkan fakta yang ada. Aturan menyatakan kondisi yang harus dipenuhi untuk menghasilkan suatu kesimpulan (misalnya jenis hama).
+  --> Hama Ulat Tanah (H1):
+      IF Daun menguning AND tanaman layu THEN Hama yang terdeteksi adalah ulat tanah.
+  --> Hama Thrips (H2):
+      IF Daun menguning AND bercak hitam THEN Hama yang terdeteksi adalah thrips.
+  --> Hama Kumbang Daun (H3):
+      IF Daun berlubang AND bercak hitam THEN Hama yang terdeteksi adalah kumbang daun.
+  --> Hama Belalang (H4):
+      IF Daun berlubang AND tanaman layu THEN Hama yang terdeteksi adalah belalang.
+
+2.Logika Proposisional
+Untuk memformalkan sistem ini dalam logika proposisional, kita bisa mendefinisikan proposisi yang mewakili gejala dan jenis hama.
+Definisi Proposisi:
+P1: Daun menguning
+P2: Tanaman layu
+P3: Bercak hitaM
+P4: Daun berlubang
+
+Aturan Diagnosa:
+--> H1: Hama ulat tanah
+    P1 ∧ P2 (Jika daun menguning dan tanaman layu, maka hama yang terdeteksi adalah ulat tanah)
+--> H2: Hama thrips
+    P1 ∧ P3 (Jika daun menguning dan terdapat bercak hitam, maka hama yang terdeteksi adalah thrips)
+--> H3: Hama kumbang daun
+    P4 ∧ P3 (Jika daun berlubang dan terdapat bercak hitam, maka hama yang terdeteksi adalah kumbang daun)
+--> H4: Hama belalang
+    P4 ∧ P2 (Jika daun berlubang dan tanaman layu, maka hama yang terdeteksi adalah belalang)
+
+PseudoCode
+Berikut ini source code pada PseudoCode: 
+Fungsi tanya(gejala):
+    Tampilkan pesan "Apakah tanaman mengalami gejala [gejala]? (y/n): "
+    Baca jawaban
+    Jika jawaban == 'y':
+        Tambahkan gejala ke dalam fakta
+    Kembali
+
+Fungsi diagnosa():
+    Bersihkan semua fakta gejala
+    Tanyakan semua gejala:
+        tanya('daun_menguning')
+        tanya('tanaman_layu')
+        tanya('bercak_hitam')
+        tanya('daun_berlubang')
+    
+    Jika daun_menguning dan tanaman_layu ada:
+        Tampilkan "Hama yang terdeteksi: ulat tanah"
+    Jika daun_menguning dan bercak_hitam ada:
+        Tampilkan "Hama yang terdeteksi: thrips"
+    Jika daun_berlubang dan bercak_hitam ada:
+        Tampilkan "Hama yang terdeteksi: kumbang daun"
+    Jika daun_berlubang dan tanaman_layu ada:
+        Tampilkan "Hama yang terdeteksi: belalang"
+    Jika tidak ada kecocokan dengan aturan:
+        Tampilkan "Tidak dapat mendeteksi jenis hama"
+
+
+SwiProlog
+% Menyatakan fakta gejala sebagai dinamis (bisa berubah runtime)
+:- dynamic gejala/1.
+
+% Aturan-aturan diagnosa
+hama(ulat_tanah) :-
+    gejala(daun_menguning),
+    gejala(tanaman_layu).
+
+hama(thrips) :-
+    gejala(daun_menguning),
+    gejala(bercak_hitam).
+
+hama(kumbang_daun) :-
+    gejala(daun_berlubang),
+    gejala(bercak_hitam).
+
+hama(belalang) :-
+    gejala(daun_berlubang),
+    gejala(tanaman_layu).
+
+% Pertanyaan
+tanya(Gejala) :-
+    format('Apakah tanaman mengalami ~w? (y/n): ', [Gejala]),
+    read(Jawaban),
+    (Jawaban == y -> assertz(gejala(Gejala)) ; true).
+
+% Prosedur utama untuk diagnosa
+diagnosa :-
+    retractall(gejala(_)), % Bersihkan fakta lama
+    tanya(daun_menguning),
+    tanya(bercak_hitam),
+    tanya(daun_berlubang),
+    tanya(tanaman_layu),
+    nl,
+    (   hama(H) ->
+        format('Jenis hama yang terdeteksi: ~w~n', [H])
+    ;   write('Tidak dapat mendeteksi jenis hama dari gejala yang diberikan.'), nl
+    ).
+
+
+Python
+def tanya_gejala(gejala):
+    while True:
+        jawaban = input(f"Apakah tanaman mengalami gejala '{gejala}'? (y/n): ").strip().lower()
+        if jawaban in ('y', 'n'):
+            return jawaban == 'y'
+        else:
+            print("Input tidak valid. Masukkan 'y' untuk ya atau 'n' untuk tidak.")
+
+def deteksi_hama():
+    print("=== SISTEM DETEKSI HAMA TANAMAN ===")
+    print("Silakan jawab pertanyaan berikut dengan 'y' (ya) atau 'n' (tidak).")
+    print("-" * 40)
+    
+    # Mengumpulkan gejala
+    daun_menguning = tanya_gejala("daun menguning")
+    bercak_hitam = tanya_gejala("terdapat bercak hitam")
+    daun_berlubang = tanya_gejala("daun berlubang")
+    tanaman_layu = tanya_gejala("tanaman layu")
+    
+    print("-" * 40)
+    
+    # Menentukan jenis hama berdasarkan kombinasi gejala
+    if daun_menguning and tanaman_layu:
+        print("Hasil Deteksi: Hama yang terdeteksi adalah Ulat Tanah.")
+    elif daun_menguning and bercak_hitam:
+        print("Hasil Deteksi: Hama yang terdeteksi adalah Thrips.")
+    elif daun_berlubang and bercak_hitam:
+        print("Hasil Deteksi: Hama yang terdeteksi adalah Kumbang Daun.")
+    elif daun_berlubang and tanaman_layu:
+        print("Hasil Deteksi: Hama yang terdeteksi adalah Belalang.")
+    else:
+        print("Hasil Deteksi: Tidak dapat menentukan jenis hama berdasarkan gejala yang diberikan.")
+    
+    print("Terima kasih telah menggunakan sistem deteksi ini.")
+
+# Menjalankan program
+if __name__ == "__main__":
+    deteksi_hama()
+
+
+Penjelasan alur inferensi 
+Alur inferensi dari sistem pakar yang telah dibuat, dari input  ke output (hasil diagnosa). Alur ini mencakup bagaimana sistem pakar menggunakan gejala yang diberikan oleh pengguna untuk menarik kesimpulan tentang jenis hama yang terdeteksi. Dengan alur inferensi,sebagai berikut:
+1)Input: Jawaban Pengguna
+  Pertama-tama, pengguna diminta untuk menjawab serangkaian pertanyaan mengenai gejala yang dialami oleh tanaman. Pertanyaan ini mencakup 4 gejala yang telah didefinisikan sebelumnya:
+a.Daun menguning
+b.Tanaman layu
+c.Bercak hitam
+d.Daun berlubang
+Jawaban pengguna yang akan dimasukkan berupa y (ya) atau n (tidak) untuk setiap gejala tersebut.
+
+2)Pengumpulan Fakta Gejala
+Setiap kali pengguna memberikan jawaban "y" untuk sebuah gejala, sistem akan menyimpan gejala tersebut dalam fakta yang akan digunakan untuk proses inferensi selanjutnya. Fakta ini akan disimpan dalam sebuah struktur data, misalnya set di Python, yang dinamakan fakta. Ini adalah basis data yang berisi semua gejala yang sudah dikonfirmasi oleh pengguna.
+
+3)Inferensi Berdasarkan Aturan Diagnosa
+  Setelah semua gejala ditanyakan, sistem akan melakukan proses inferensi, yaitu memeriksa apakah kombinasi gejala yang telah dikonfirmasi oleh pengguna cocok dengan aturan-aturan yang ada. Proses ini terjadi dengan cara memeriksa aturan-aturan diagnosa yang telah ditulis dalam kode. Aturan-aturan ini adalah:
+a.Hama Ulat Tanah: Terdeteksi jika daun menguning dan tanaman layu.
+b.Hama Thrips: Terdeteksi jika daun menguning dan bercak hitam.
+c.Hama Kumbang Daun: Terdeteksi jika daun berlubang dan bercak hitam.
+d.Hama Belalang: Terdeteksi jika daun berlubang dan tanaman layu.
+  Sistem akan memeriksa kombinasi gejala yang ada dalam fakta. Misalnya:
+•Jika daun menguning dan tanaman layu ada dalam fakta, maka sistem akan mencocokkan dengan aturan pertama dan menyimpulkan bahwa hama ulat tanah terdeteksi.
+•Jika daun menguning dan bercak hitam ada dalam fakta, maka sistem akan mencocokkan dengan aturan kedua dan menyimpulkan bahwa hama thrips terdeteksi.
+
+4)Proses Inferensi Langkah per Langkah
+a.Memeriksa Hama Ulat Tanah
+  Sistem memeriksa apakah gejala daun menguning dan tanaman layu ada dalam fakta,jika kedua gejala ini ada, maka hasil inferensi adalah hama ulat tanah.
+b.Memeriksa Hama Thrips
+  Jika tidak ditemukan hama ulat tanah, sistem akan memeriksa apakah daun menguning dan bercak hitam ada dalam fakta,jika kedua gejala ini ada, maka hasil inferensi adalah hama thrips.
+c.Memeriksa Hama Kumbang Daun
+  Jika tidak ditemukan hama ulat tanah atau hama thrips, sistem akan memeriksa apakah daun berlubang dan bercak hitam ada dalam fakta,jika kedua gejala ini ada, maka hasil inferensi adalah hama kumbang daun.
+d.Memeriksa Hama Belalang
+  Jika tidak ada hasil dari langkah-langkah sebelumnya, sistem akan memeriksa apakah daun berlubang dan tanaman layu ada dalam fakta,jika kedua gejala ini ada, maka hasil inferensi adalah hama belalang.
+e.Jika Tidak Ada Kecocokan
+  Jika tidak ada kombinasi gejala yang cocok dengan aturan yang ada, sistem akan menyimpulkan bahwa tidak dapat mendeteksi jenis hama.
+
+5)Output: Jenis Hama yang Terdeteksi
+  Berdasarkan kombinasi gejala yang ditemukan dalam fakta, sistem akan memberikan hasil sebagai output: Jenis hama yang terdeteksi sesuai dengan aturan yang cocok. Dan Jika tidak ada kecocokan dengan aturan, sistem akan menampilkan pesan bahwa tidak dapat mendeteksi jenis hama.
+
+
+Contoh Alur Inferensi
+Berikut ini merupakan contoh alur dengan jawaban dari pengguna yang mengarah ke "Hama Ulat Tanah":
+Input: Pengguna menjawab pertanyaan tentang gejala sebagai berikut:
+
+1.Apakah tanaman mengalami gejala daun menguning?
+Jawaban: y. (daun menguning)
+
+2.Apakah tanaman mengalami gejala tanaman layu?
+Jawaban: y. (tanaman layu)
+
+3.Apakah tanaman mengalami gejala bercak hitam?
+Jawaban: n.
+
+4.Apakah tanaman mengalami gejala daun berlubang?
+Jawaban: n.
+
+Proses Inferensi:
+1.Mengumpulkan Fakta:
+  Setelah menjawab, fakta yang dikumpulkan dalam set fakta adalah:
+  fakta = {'daun_menguning', 'tanaman_layu'}
+2.Mengecek Aturan Diagnosa:
+  Hama Ulat Tanah: Diperiksa apakah daun menguning dan tanaman layu ada dalam fakta. Jika Kedua gejala ada, maka sistem menyimpulkan bahwa hama ulat tanah terdeteksi.
+3.Output:
+  Maka akan menghasikan output yaitu: Hama yang terdeteksi: ulat tanah
+
+Contoh 2: Jawaban Pengguna yang Tidak Ditemukan Kecocokannya
+Pengguna menjawab sebagai berikut:
+
+1.Apakah tanaman mengalami gejala daun menguning?
+Jawaban: n.
+
+2.Apakah tanaman mengalami gejala tanaman layu?
+Jawaban: n.
+
+3.Apakah tanaman mengalami gejala bercak hitam?
+Jawaban: n.
+
+4.Apakah tanaman mengalami gejala daun berlubang?
+Jawaban: n.
+
+Proses Inferensi:
+1.Mengumpulkan Fakta: Fakta yang dikumpulkan dalam set fakta adalah:
+  fakta = set()
+2.Mengecek Aturan Diagnosa: Tidak ada gejala yang terdeteksi, jadi tidak ada aturan yang cocok.
+3.Output:
+  Maka akan menghasikan output yaitu: Tidak dapat mendeteksi jenis hama dari gejala yang diberikan.
+  Alur inferensi ini menggambarkan bagaimana program melakukan penalaran logika untuk mencapai hasil berdasarkan gejala yang dimasukkan oleh pengguna.
+
