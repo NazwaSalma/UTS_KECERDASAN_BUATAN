@@ -5,9 +5,8 @@ Soal 2: Melakukan review terhadap jurnal ilmiah terkait.
 
 Tahapan Pengerjaan
 Soal 1: Menjawab Studi Kasus
-1. Membaca dan Memahami Studi Kasus
--->Menganalisis permasalahan yang diberikan.
--->Mengidentifikasi poin-poin penting dalam studi kasus.
+1. Membaca dan Memahami Studi Kasus dengan Menganalisis permasalahan yang diberikan,dan Mengidentifikasi poin-poin penting dalam studi 
+   kasus.
 2. Membaca dan Memahami Isi Jurnal
    Membaca abstrak, metodologi, hasil, dan kesimpulan jurnal secara menyeluruh.
 3. Menyusun Jawaban
